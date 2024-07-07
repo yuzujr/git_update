@@ -1,7 +1,6 @@
 @echo off
 setlocal enabledelayedexpansion
 
-
 rem 获取 ESC 字符
 for /f %%a in ('echo prompt $E^| cmd') do set "ESC=%%a"
 
@@ -12,12 +11,14 @@ set "RESET=%ESC%[0m"
 
 rem 选择菜单
 :choose
+cls
 echo %GREEN%MENU%RESET%
 echo %GREEN%1%RESET%. update (default)
 echo %GREEN%2%RESET%. add new repository
+echo %GREEN%3%RESET%. delete repository
 echo %GREEN%q%RESET%. quit
 echo.
-echo input %GREEN%1%RESET%/%GREEN%2%RESET%/%GREEN%q%RESET%/%GREEN%Enter%RESET%(default)
+echo input %GREEN%1%RESET%/%GREEN%2%RESET%/%GREEN%3%RESET%/%GREEN%q%RESET%/%GREEN%Enter%RESET%(default)
 
 set /p choice=Enter your choice: 
 
@@ -30,11 +31,11 @@ if /i "%choice%"=="q" (
     set /p newrepo=
 
     rem 处理新仓库路径
-    if exist !newrepo! (
+    if exist "!newrepo!" (
         if not exist repos.txt (
-            echo !newrepo! > repos.txt
+            >repos.txt echo !newrepo!
         ) else (
-            echo !newrepo! >> repos.txt
+            >>repos.txt echo !newrepo!
         )
         echo !newrepo! %GREEN%add successfully%RESET%
         ping -n 2 127.0.0.1 >nul
@@ -42,6 +43,29 @@ if /i "%choice%"=="q" (
         goto choose
     ) else (
         echo %RED%The specified path does not exist.%RESET%
+        ping -n 2 127.0.0.1 >nul
+        cls
+        goto choose
+    )
+) else if /i "%choice%"=="3" (
+    rem 删除现有的仓库
+    echo.
+    echo Enter the %RED%path%RESET% of the repository to delete:
+    set /p delrepo=
+
+    rem 处理删除仓库路径
+    if exist repos.txt (
+        set "tempfile=temp.txt"
+        for /f "usebackq tokens=*" %%i in ("repos.txt") do (
+            if /i not "%%i"=="!delrepo!" echo %%i>>"!tempfile!"
+        )
+        move /y "!tempfile!" repos.txt >nul
+        echo !delrepo! %GREEN%delete successfully%RESET%
+        ping -n 2 127.0.0.1 >nul
+        cls
+        goto choose
+    ) else (
+        echo %RED%The specified path does not exist in repos.txt%RESET%
         ping -n 2 127.0.0.1 >nul
         cls
         goto choose
@@ -85,7 +109,7 @@ for /f "tokens=*" %%d in (repos.txt) do (
         echo %RED%Skipping%RESET% %%d %RED%[not a git repository]%RESET%
     )
     echo.
- )
+)
 
 :end
 pause
