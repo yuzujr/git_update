@@ -100,8 +100,10 @@ for /f "tokens=*" %%d in (repos.txt) do (
             echo %RED%No changes%RESET%
         ) else (
             echo %GREEN%Changes detected%RESET%
+            echo Please input %GREEN%commit message%RESET% for "%%d":
+            set /p commit_msg=
             git add .
-            git commit -m "auto_update"
+            git commit -m "!commit_msg!"
             git push
             echo %GREEN%Update successfully%RESET%
         )
