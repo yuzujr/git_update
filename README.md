@@ -2,11 +2,11 @@
 a batch file that update your git repositories
 
 #### usage
-1. 保证`repos.txt`中末尾有一个空行，否则会和之前的仓库目录冲突
-2. 更新行为默认为
+1. Ensure there is a blank line at the end of `repos.txt`, otherwise it will conflict with the previous repository directory.
+2. The default update behavior is:
    ```
    git add .
    git commit -m "auto_update"
    git push
    ```
-   如有需要可以自行更改
+   You can change it if necessary.
