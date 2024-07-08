@@ -10,3 +10,4 @@ a batch file that update your git repositories
    git push
    ```
    You can change it if necessary.
+3. The `git_update_auto` is faster and more concise,which is more suitable for automated execution.
