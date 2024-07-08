@@ -56,11 +56,20 @@ if /i "%choice%"=="q" (
     rem 处理删除仓库路径
     if exist repos.txt (
         set "tempfile=temp.txt"
+        set delete_flag=0
         for /f "usebackq tokens=*" %%i in ("repos.txt") do (
-            if /i not "%%i"=="!delrepo!" echo %%i>>"!tempfile!"
+            if /i not "%%i"=="!delrepo!" (
+                echo %%i>>"!tempfile!"
+            ) else (
+                set delete_flag=1
+            )
         )
         move /y "!tempfile!" repos.txt >nul
-        echo !delrepo! %GREEN%delete successfully%RESET%
+        if "!delete_flag!" == "1" (
+            echo !delrepo! %GREEN%delete successfully%RESET%
+        ) else (
+            echo %RED%The specified path does not exist in repos.txt%RESET%
+        )
         ping -n 2 127.0.0.1 >nul
         cls
         goto choose
@@ -86,31 +95,37 @@ rem 执行默认的更新操作
 echo.
 rem 遍历repos.txt中的每个目录并执行 git 命令
 for /f "tokens=*" %%d in (repos.txt) do (
+    set skipdir=
     if exist %%d (
         cd /d %%d
-    ) else (
-        echo %RED%Skipping%RESET% %%d %RED%[path does not exist]%RESET%
-        echo.
-        continue
-    )
-    if exist .git (
-        echo %GREEN%Checking%RESET% %%d
-        git diff-index --quiet HEAD --
-        if not errorlevel 1 (
-            echo %RED%No changes%RESET%
+        if exist .git (
+            echo %GREEN%Checking%RESET% %%d
+            git diff-index --quiet HEAD --
+            if not errorlevel 1 (
+                echo %RED%No changes%RESET%
+            ) else (
+                echo %GREEN%Changes detected%RESET%
+                echo Please input %GREEN%commit message%RESET% for "%%d":
+                echo Press %GREEN%Enter%RESET% to skip
+                set /p commit_msg=
+                if not "!commit_msg!"=="" (
+                    git add .
+                    git commit -m "!commit_msg!"
+                    git push
+                    echo %GREEN%Update successfully%RESET%
+                ) else (
+                    set skipdir=1
+                )
+            )
         ) else (
-            echo %GREEN%Changes detected%RESET%
-            echo Please input %GREEN%commit message%RESET% for "%%d":
-            set /p commit_msg=
-            git add .
-            git commit -m "!commit_msg!"
-            git push
-            echo %GREEN%Update successfully%RESET%
+            echo %RED%Skipping%RESET% %%d %RED%[not a git repository]%RESET%
         )
     ) else (
-        echo %RED%Skipping%RESET% %%d %RED%[not a git repository]%RESET%
+        echo %RED%Skipping%RESET% %%d %RED%[path does not exist]%RESET%
     )
-    echo.
+    if not defined skipdir (
+        echo.
+    )
 )
 
 :end
