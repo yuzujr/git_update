@@ -102,7 +102,9 @@ for /f "tokens=*" %%d in (repos.txt) do (
             echo %GREEN%Checking%RESET% %%d
             set "GIT_STATUS_OUTPUT="
             for /f "delims=" %%i in ('git status --short') do set GIT_STATUS_OUTPUT=%%i
-            if not "!GIT_STATUS_OUTPUT!"=="" (
+            if "!GIT_STATUS_OUTPUT!"=="" (
+                echo %RED%No changes%RESET%
+            ) else (
                 echo %GREEN%Changes detected%RESET%
                 echo Please input %GREEN%commit message%RESET% for "%%d":
                 echo Press %GREEN%Enter%RESET% to skip
