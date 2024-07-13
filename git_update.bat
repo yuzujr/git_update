@@ -100,10 +100,9 @@ for /f "tokens=*" %%d in (repos.txt) do (
         cd /d %%d
         if exist .git (
             echo %GREEN%Checking%RESET% %%d
-            git diff-index --quiet HEAD --
-            if not errorlevel 1 (
-                echo %RED%No changes%RESET%
-            ) else (
+            set "GIT_STATUS_OUTPUT="
+            for /f "delims=" %%i in ('git status --short') do set GIT_STATUS_OUTPUT=%%i
+            if not "!GIT_STATUS_OUTPUT!"=="" (
                 echo %GREEN%Changes detected%RESET%
                 echo Please input %GREEN%commit message%RESET% for "%%d":
                 echo Press %GREEN%Enter%RESET% to skip
