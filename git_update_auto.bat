@@ -1,14 +1,6 @@
 setlocal enabledelayedexpansion
 for %%d in (
-    D:\c++\Clion
-    D:\c++\Sublime
-    D:\c++\VS\trunk
-    D:\c++\vscode
-    D:\c++\vscode\note
-    D:\Python\Pycharm\learning
-    D:\Python\Sublime
-    D:\rust
-    D:\git_update\
+    D:\your\repository\path
 ) do (
     cd /d %%d
     if exist .git (

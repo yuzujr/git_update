@@ -96,6 +96,7 @@ echo.
 rem 遍历repos.txt中的每个目录并执行 git 命令
 for /f "tokens=*" %%d in (repos.txt) do (
     set skipdir=
+    set commit_msg=
     if exist %%d (
         cd /d %%d
         if exist .git (
