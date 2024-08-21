@@ -1,2 +1,2 @@
-C:\
-D:\
+C:\your\repository\path
+D:\your\repository\path

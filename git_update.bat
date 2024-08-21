@@ -10,7 +10,7 @@ set "RED=%ESC%[0;31m"
 set "RESET=%ESC%[0m"
 
 rem 选择菜单
-:choose
+:choose 
 cls
 echo %GREEN%MENU%RESET%
 echo %GREEN%1%RESET%. update (default)
