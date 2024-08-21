@@ -107,6 +107,8 @@ for /f "tokens=*" %%d in (repos.txt) do (
                 echo %RED%No changes%RESET%
             ) else (
                 echo %GREEN%Changes detected%RESET%
+		git status
+		echo.
                 echo Please input %GREEN%commit message%RESET% for "%%d":
                 echo Press %GREEN%Enter%RESET% to skip
                 set /p commit_msg=
@@ -127,6 +129,7 @@ for /f "tokens=*" %%d in (repos.txt) do (
     )
     if not defined skipdir (
         echo.
+	echo.
     )
 )
 
