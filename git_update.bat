@@ -10,7 +10,7 @@ set "RED=%ESC%[0;31m"
 set "RESET=%ESC%[0m"
 
 rem 选择菜单
-:choose 
+:choose
 cls
 echo %GREEN%MENU%RESET%
 echo %GREEN%1%RESET%. update (default)
@@ -107,12 +107,17 @@ for /f "tokens=*" %%d in (repos.txt) do (
                 echo %RED%No changes%RESET%
             ) else (
                 echo %GREEN%Changes detected%RESET%
-		git status
-		echo.
+                git status
+                echo.
                 echo Please input %GREEN%commit message%RESET% for "%%d":
-                echo Press %GREEN%Enter%RESET% to skip
+                echo Press %GREEN%Enter%RESET% to skip or type %GREEN%manual%RESET% to manually handle updates:
                 set /p commit_msg=
-                if not "!commit_msg!"=="" (
+                if /i "!commit_msg!"=="manual" (
+                    echo %GREEN%Opening a new terminal window for manual updates...%RESET%
+                    start cmd /k "cd /d %%d && echo. && echo %GREEN%You are now in %%d. Please perform your git operations manually.%RESET%"
+                    echo %RED%Waiting for you to close the new terminal window...%RESET%
+                    pause >nul
+                ) else if not "!commit_msg!"=="" (
                     git add .
                     git commit -m "!commit_msg!"
                     git push
@@ -129,7 +134,7 @@ for /f "tokens=*" %%d in (repos.txt) do (
     )
     if not defined skipdir (
         echo.
-	echo.
+        echo.
     )
 )
 
