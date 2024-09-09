@@ -107,7 +107,7 @@ for /f "tokens=*" %%d in (repos.txt) do (
                 echo %RED%No changes%RESET%
             ) else (
                 echo %GREEN%Changes detected%RESET%
-                git status
+                git status --short
                 echo.
                 echo Please input %GREEN%commit message%RESET% for "%%d":
                 echo Press %GREEN%Enter%RESET% to skip or type %GREEN%manual%RESET% to manually handle updates:
