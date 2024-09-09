@@ -6,8 +6,8 @@ a batch file that update your git repositories
 2. The default update behavior is:
    ```
    git add .
-   git commit -m "auto_update"
+   git commit -m "the commit message you input"
    git push
    ```
-   You can change it if necessary.
-3. The `git_update_auto` is faster and more concise,which is more suitable for automated execution.
+   You can change it in bat if necessary,or just type **manual** when asked for commit message to complete the update yourself if ***the three*** cannot meet your needs.
+4. The `git_update_auto` is faster and more concise,which is more suitable for automated execution.
