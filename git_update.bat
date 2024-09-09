@@ -86,7 +86,7 @@ if /i "%choice%"=="q" (
 ) else (
     echo %RED%Invalid choice%RESET%
     ping -n 2 127.0.0.1 >nul
-    cls
+    set choice=
     goto choose
 )
 
